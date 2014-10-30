@@ -1,9 +1,9 @@
 /*******************************************************************************
-** File:    RC_Mower.ino
+** File:    Robot.ino
 ** Author:  Carl Hansen
 ** Version: 0.0.1
 ** Purpose: Takes inputs from an RC and converts it into signals to control
-**          a mower.
+**          a robot.
 *******************************************************************************/
 
 
