@@ -1,4 +1,4 @@
-RC_Mower
+Robot
 ========
 
-A Mower that is controlled by RC.
+A Robot that does something.
