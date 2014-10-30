@@ -1,0 +1,43 @@
+*May need to get I2C splitter
+*Try to get Pololu screen working
+
+Requirements:
+These are for the left joystick
+The joystick will read bythe analogue input to determine it's posistion
+The initial jostick value will float at a fixed voltage of ___V
+If the joystick reading returns 5V after the initial reading then the direction will be UP and the step will be 1. If it returns 3V after the initial values then the direction is down. For left and right, 5V is left and 3V is right
+A step of 1 is considered low and a step of 5 will be the highest.
+The joystick will change step values by roughly 0.6V
+
+the controller will control the servos for the left and right track speed
+Each of the 5 steps corrispond to a value that is the speed for each track
+These values are, for step values, 0 = 0%, 1 = 10%, 2 = 20%, 3 = 40%, 4 = 70% and 5 = 100%.
+When the left and right step values change the speed for the left or right track will drop by a percentage of their current level.
+These percentages for left and right drop are, for left adn right steps, 0 = 0%, 1 = 5%, 2 = 10%, 3 = 20%, 4 = 40%, 5 = 60%.
+
+
+The joysticks will be connected to A0 for left joystick - up/down, A1 for left joystick - left/right, A2 right joystick - up/down, A3 right oystick - left/right
+
+The left track will be connected to OUT1 and the right to OUT2
+
+
+
+There is a third servo that controls the engine/throttle
+The enigne servo will turn to it's default, IDLE, position of 20%(?)
+The switch connected to IN1 is the clutch engage switch
+When the reading is LOW the engine servo will remain in IDLE.
+When the reading is HIGH the engine servo will turn to 80%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
