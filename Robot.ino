@@ -15,6 +15,8 @@
 /***************************************************************************************************
 ** Constants
 ***************************************************************************************************/
+#define DEBUG_MODE  1  // Used to print debug information
+
 #define MODE_PLAYSTATION  1  // Controls tracks and throttle by different joysticks
 #define MODE_SKIDSTICK    2  // Controls each track by the joysticks
 
@@ -26,6 +28,11 @@
 #define DEFAULT_ENGINE_THROTTLE  1.0  // Default throttle position
 
 #define JOYSTICK_READ_FREQUENCY  1000  // The frequency to read each joystick
+
+#define DIRECTION_UL    1  // Joystick is in the up or left position
+#define DIRECTION_DR   -1  // Joystick is in the down or right position
+#define DIRECTION_NONE  0  // Joystick is in centre
+
 
 
 /***************************************************************************************************
@@ -53,22 +60,22 @@
 /***************************************************************************************************
 ** Input Pins
 ***************************************************************************************************/
-#define i_controllerModeSelect  IN7  // Switch that determines controller mode
-#define i_safetyOverride        IN8  // Button to override safety stop
+#define I_CONTROLLER_MODE_SELECT  IN7  // Switch that determines controller mode
+#define I_SAFETY_OVERRIDE         IN8  // Button to override safety stop
 
-#define i_leftJoystickHorizontal   A0  // Horizontal axis of the left joystick
-#define i_leftJoystickVertical     A1  // Vertical axis of the left joystick
-#define i_rightJoystickHorizontal  A2  // Horizontal axis of the right joystick
-#define i_rightJoystickVertical    A3  // Vertical axis of the right joystick
+#define I_LEFT_JOYSTICK_HORIZONTAL   A0  // Horizontal axis of the left joystick
+#define I_LEFT_JOYSTICK_VERTICAL     A1  // Vertical axis of the left joystick
+#define I_RIGHT_JOYSTICK_HORIZONTAL  A2  // Horizontal axis of the right joystick
+#define I_RIGHT_JOYSTICK_VERTICAL    A3  // Vertical axis of the right joystick
 
 
 /***************************************************************************************************
 ** Output Pins
 ***************************************************************************************************/
-#define o_leftTrackServo   OUT1  // Pin connected to the left track servo
-#define o_rightTrackServo  OUT2  // Pin connected to the right track servo
-#define o_deckServo        OUT7  // Pin that controls the deck height servo
-#define o_engineServo      OUT8  // Pin that controls engine throttle servo
+#define O_LEFT_TRACK_SERVO   OUT1  // Pin connected to the left track servo
+#define O_RIGHT_TRACK_SERVO  OUT2  // Pin connected to the right track servo
+#define O_DECK_SERVO         OUT7  // Pin that controls the deck height servo
+#define O_ENGINE_SERVO       OUT8  // Pin that controls engine throttle servo
 
 
 /***************************************************************************************************
@@ -103,6 +110,11 @@ double deckHeightLookup[2][6] = {
 {  0,   1,   2,   3,   4,   5},   // Joystick level
 {0.0, 0.2, 0.4, 0.6, 0.8, 1.0}};  // Servo percentage
 
+Joystick leftHoriJS;  // The joysticks
+Joystick leftVertJS;
+Joystick rightHoriJS;
+Joystick rightVertJS;
+
 
 
 
@@ -114,13 +126,29 @@ double deckHeightLookup[2][6] = {
 ***************************************************************************************************/
 void setup() {
   // Initialise Serial port
-  Serial.begin(115200);
+  if ( DEBUG_MODE ) Serial.begin(115200);
+  if ( DEBUG_MODE ) Serial.println("Beginning setup");
   
   // Set pins to be input or output
-
-  // Set servos to their default position
+  if ( DEBUG_MODE ) Serial.println("Assigning pin modes");
   
   // Set up other variables
+  if ( DEBUG_MODE ) Serial.println("Initialising variables");
+  leftHoriJS.inputPin = I_LEFT_JOYSTICK_HORIZONTAL;
+  leftVertJS.inputPin = I_LEFT_JOYSTICK_VERTICAL;
+  rightHoriJS.inputPin = I_RIGHT_JOYSTICK_HORIZONTAL;
+  rightVertJS.inputPin = I_RIGHT_JOYSTICK_VERTICAL;
+  leftHoriJS.currentLevel = leftVertJS.currentLevel = rightHoriJS.currentLevel = rightVertJS.currentLevel = 0;
+  leftHoriJS.previousLevel = leftVertJS.previousLevel = rightHoriJS.previousLevel = rightVertJS.previousLevel = 0;
+  leftHoriJS.direction = leftVertJS.direction = rightHoriJS.direction = rightVertJS.direction = DIRECTION_NONE;
+  
+  // Set servos to their default position
+  if ( DEBUG_MODE ) Serial.println("Defaulting servos");
+  
+  // Let things settle by waiting
+  delay(2000);
+  
+  if ( DEBUG_MODE ) Serial.println("Starting main loop");
 }
 
 
@@ -160,16 +188,6 @@ void loop() {
 
 
 
-/***************************************************************************************************
-** servoToAngle(angle)
-** Moves the servo to the specified percentage.
-** Returns 0 on success.
-***************************************************************************************************/
-int servoTo(double percentage) {
-  // Use angle to find duty cycle between 0-255 and analogWrite it
-  
-  return 0;
-}
 
 
 /***************************************************************************************************
@@ -179,7 +197,6 @@ int servoTo(double percentage) {
 ***************************************************************************************************/
 int readJoystickDirection() {
   // Read the input pin for direction
-  return digitalRead(i_joystick[0]);
 }
 
 
@@ -189,16 +206,10 @@ int readJoystickDirection() {
 ** Returns values from 0 to 4 depending on how far the joystick has been pushed.
 ***************************************************************************************************/
 int readJoystickLevel() {
-  int level;
-  
-  // Read the input pins for the joysticks level
-  for (int i = 1; i < N_JOYSTICK_PINS; i++ ) {
-    if ( digitalRead(i_joystick[i]) )
-      level = 1 - i;
-  }
-  
-  return level;
+
 }
+
+
 
 
 
@@ -209,5 +220,8 @@ int readJoystickLevel() {
 ** 
 ** The function map() may be useful to convert a value to 255
 ** May need to sleep between changing outputs
+** 
+** 
+** 
+** 
 ***************************************************************************************************/
-
