@@ -10,9 +10,15 @@
 ** Libraries
 ***************************************************************************************************/
 #include <Servo.h>
+#include <AP_Common.h>
+#include <AP_Math.h>
+#include <SPI.h>
+#include <AP_Semaphore.h>
+#include <DataFlash.h>
 
 #include "PinDefinitions.h"
 #include "Joystick.h"
+#include "Configuration.h"
 
 
 /***************************************************************************************************
@@ -26,10 +32,6 @@
 
 #define SERVO_PULSE_WIDTH_MIN  1.0  // The minimum width (ms) of a PWM pulse. Also 0.7
 #define SERVO_PULSE_WIDTH_MAX  2.0  // The maximum width (ms) of a PWM pulse. Also 2.3
-
-#define DEFAULT_TRACK_POSITION   1.0  // Default track position
-#define DEFAULT_DECK_HEIGHT      1.0  // Default deck height
-#define DEFAULT_ENGINE_THROTTLE  1.0  // Default throttle position
 
 #define JOYSTICK_READ_FREQUENCY  1000  // The frequency to read each joystick
 
@@ -81,6 +83,7 @@ Joystick leftVertJS;
 Joystick rightHoriJS;
 Joystick rightVertJS;
 
+Configuration config;
 
 
 
@@ -102,6 +105,8 @@ void setup() {
   leftVertJS.setInput(I_LEFT_JOYSTICK_VERTICAL);
   rightHoriJS.setInput(I_RIGHT_JOYSTICK_HORIZONTAL);
   rightVertJS.setInput(I_RIGHT_JOYSTICK_VERTICAL);
+  
+  config.init();  
 
   // Set servos to their default position
   if ( DEBUG_MODE ) Serial.println("Defaulting servos");
