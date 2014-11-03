@@ -11,12 +11,16 @@
 ***************************************************************************************************/
 #include <Servo.h>
 
+#include "PinDefinitions.h"
+#include "Joystick.h"
+
 
 /***************************************************************************************************
 ** Constants
 ***************************************************************************************************/
 #define DEBUG_MODE  1  // Used to print debug information
 
+// May be useful in some sort of configuration class for writing to memory
 #define MODE_PLAYSTATION  1  // Controls tracks and throttle by different joysticks
 #define MODE_SKIDSTICK    2  // Controls each track by the joysticks
 
@@ -28,33 +32,6 @@
 #define DEFAULT_ENGINE_THROTTLE  1.0  // Default throttle position
 
 #define JOYSTICK_READ_FREQUENCY  1000  // The frequency to read each joystick
-
-#define DIRECTION_UL    1  // Joystick is in the up or left position
-#define DIRECTION_DR   -1  // Joystick is in the down or right position
-#define DIRECTION_NONE  0  // Joystick is in centre
-
-
-
-/***************************************************************************************************
-** Pin Definitions
-***************************************************************************************************/
-#define IN1  13
-#define IN2  12
-#define IN3  11
-#define IN4  10
-#define IN5  50
-#define IN6  51
-#define IN7  52
-#define IN8  53
-
-#define OUT1 12
-#define OUT2 11
-#define OUT3 8
-#define OUT4 7
-#define OUT5 6
-#define OUT6 3
-#define OUT7 2
-#define OUT8 5
 
 
 /***************************************************************************************************
@@ -85,17 +62,6 @@
 
 
 /***************************************************************************************************
-** Structures
-***************************************************************************************************/
-typedef struct {
-    int inputPin;
-    int currentLevel;
-    int previousLevel;
-    int direction;
-} Joystick;
-
-
-/***************************************************************************************************
 ** Global Variables
 ***************************************************************************************************/
 unsigned long time;  // The current time of the board
@@ -118,8 +84,6 @@ Joystick rightVertJS;
 
 
 
-
-
 /***************************************************************************************************
 ** setup()
 ** This will set everything to it's default position and ready to mower for operation.
@@ -134,14 +98,11 @@ void setup() {
   
   // Set up other variables
   if ( DEBUG_MODE ) Serial.println("Initialising variables");
-  leftHoriJS.inputPin = I_LEFT_JOYSTICK_HORIZONTAL;
-  leftVertJS.inputPin = I_LEFT_JOYSTICK_VERTICAL;
-  rightHoriJS.inputPin = I_RIGHT_JOYSTICK_HORIZONTAL;
-  rightVertJS.inputPin = I_RIGHT_JOYSTICK_VERTICAL;
-  leftHoriJS.currentLevel = leftVertJS.currentLevel = rightHoriJS.currentLevel = rightVertJS.currentLevel = 0;
-  leftHoriJS.previousLevel = leftVertJS.previousLevel = rightHoriJS.previousLevel = rightVertJS.previousLevel = 0;
-  leftHoriJS.direction = leftVertJS.direction = rightHoriJS.direction = rightVertJS.direction = DIRECTION_NONE;
-  
+  leftHoriJS.setInput(I_LEFT_JOYSTICK_HORIZONTAL);
+  leftVertJS.setInput(I_LEFT_JOYSTICK_VERTICAL);
+  rightHoriJS.setInput(I_RIGHT_JOYSTICK_HORIZONTAL);
+  rightVertJS.setInput(I_RIGHT_JOYSTICK_VERTICAL);
+
   // Set servos to their default position
   if ( DEBUG_MODE ) Serial.println("Defaulting servos");
   
@@ -184,33 +145,6 @@ void loop() {
 
   // Read from other inputs when needed
 }
-
-
-
-
-
-
-/***************************************************************************************************
-** readJoystickDirection()
-** Reads the value of the joystick input corresponding to the direction.
-** Returns 0 for Up or Left, 1 for Down or Right.
-***************************************************************************************************/
-int readJoystickDirection() {
-  // Read the input pin for direction
-}
-
-
-/***************************************************************************************************
-** readJoystickLevel()
-** Reads the values of the joystick input corresponding to the desired level.
-** Returns values from 0 to 4 depending on how far the joystick has been pushed.
-***************************************************************************************************/
-int readJoystickLevel() {
-
-}
-
-
-
 
 
 
