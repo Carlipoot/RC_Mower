@@ -8,16 +8,15 @@
 #include "Configuration.h"
 
 Configuration::Configuration() {
-  // Initialise memory
-  DataFlash.Init();
-  
   defaultTrackPostiton = DEFAULT_TRACK_POSITION;
   defaultDeckHeight = DEFAULT_DECK_HEIGHT;
   defaultEngineThrottle = DEFAULT_ENGINE_THROTTLE;
 }
 
 void Configuration::init() {
-/*   
+  // Initialise memory
+  DataFlash.Init();
+  
   // See if configuration already exists. Clear and write defaults if none found
   DataFlash.StartRead(CONFIG_PAGE);
   byte head1 = DataFlash.ReadByte();
@@ -28,7 +27,7 @@ void Configuration::init() {
   } else {
     reset();
     writeConfiguration();
-  } */
+  }
 }
 
 int Configuration::readConfiguration() {
@@ -62,5 +61,5 @@ void Configuration::writeConfiguration() {
 }
 
 void Configuration::reset() {
-  DataFlash.PageErase(CONFIG_PAGE);
+  DataFlash.EraseAll(&delay);
 }

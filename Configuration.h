@@ -7,10 +7,10 @@
 ** Purpose: Used to set configurations of the robot.
 ***************************************************************************************************/
 
-#include <AP_Semaphore.h>
 #include <DataFlash.h>
-
 #include <stdint.h>
+
+// Define a byte
 #define byte uint8_t
 
 // To determine the start of configuration packet: 0xF00D
@@ -34,7 +34,7 @@ public:
   void reset();               // Resets configuration with set defaults
   
   // Configurable variables
-  DataFlash_AMP2 DataFlash;
+  DataFlash_APM2 DataFlash;
 
   byte defaultTrackPostiton;
   byte defaultDeckHeight;

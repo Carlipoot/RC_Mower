@@ -10,6 +10,7 @@
 ** Libraries
 ***************************************************************************************************/
 #include <Servo.h>
+#include <FastSerial.h>
 #include <AP_Common.h>
 #include <AP_Math.h>
 #include <SPI.h>
@@ -66,6 +67,8 @@
 /***************************************************************************************************
 ** Global Variables
 ***************************************************************************************************/
+FastSerialPort0(Serial);
+
 unsigned long time;  // The current time of the board
 
 int mode;  // The current mode of the controller
