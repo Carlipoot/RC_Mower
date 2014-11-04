@@ -8,12 +8,12 @@
 #include "Configuration.h"
 
 Configuration::Configuration() {
-  defaultTrackPostiton = DEFAULT_TRACK_POSITION;
+  defaultTrackPosition = DEFAULT_TRACK_POSITION;
   defaultDeckHeight = DEFAULT_DECK_HEIGHT;
   defaultEngineThrottle = DEFAULT_ENGINE_THROTTLE;
 }
 
-void Configuration::init() {
+/* void Configuration::init() {
   // Initialise memory
   DataFlash.Init();
   
@@ -21,26 +21,26 @@ void Configuration::init() {
   DataFlash.StartRead(CONFIG_PAGE);
   byte head1 = DataFlash.ReadByte();
   byte head2 = DataFlash.ReadByte();
-  
+
   if ( (head1 == HEAD_BYTE1) && (head2 == HEAD_BYTE2) ) {
     readConfiguration();
   } else {
-    reset();
-    writeConfiguration();
+    // reset();
+    // writeConfiguration();
   }
-}
+} */
 
 int Configuration::readConfiguration() {
   // Read configuration
-  DataFlash.StartRead(CONFIG_PAGE);
-  byte head1 = DataFlash.ReadByte();
-  byte head2 = DataFlash.ReadByte();
+  StartRead(CONFIG_PAGE);
+  byte head1 = ReadByte();
+  byte head2 = ReadByte();
   
   // Start reading if there
   if ( (head1 == HEAD_BYTE1) && (head2 == HEAD_BYTE2) ) {
-    defaultTrackPostiton = DataFlash.ReadByte();
-    defaultDeckHeight = DataFlash.ReadByte();
-    defaultEngineThrottle = DataFlash.ReadByte();
+    defaultTrackPosition = ReadByte();
+    defaultDeckHeight = ReadByte();
+    defaultEngineThrottle = ReadByte();
     
     // TODO - Checksum here
     return ((int) 1);
@@ -49,17 +49,17 @@ int Configuration::readConfiguration() {
 }
 
 void Configuration::writeConfiguration() {
-  // Begin writing
-  DataFlash.StartWrite(CONFIG_PAGE);
+  // Begin writing configuration
+  StartWrite(1);
   
-  DataFlash.WriteByte(HEAD_BYTE1);
-  DataFlash.WriteByte(HEAD_BYTE2);
+  WriteByte(HEAD_BYTE1);
+  WriteByte(HEAD_BYTE2);
   
-  DataFlash.WriteByte(defaultTrackPostiton);
-  DataFlash.WriteByte(defaultDeckHeight);
-  DataFlash.WriteByte(defaultEngineThrottle);
+  WriteByte(defaultTrackPosition);
+  WriteByte(defaultDeckHeight);
+  WriteByte(defaultEngineThrottle);
 }
 
-void Configuration::reset() {
+/* void Configuration::reset() {
   DataFlash.EraseAll(&delay);
-}
+} */

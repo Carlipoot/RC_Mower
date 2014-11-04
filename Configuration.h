@@ -24,19 +24,19 @@
 #define DEFAULT_DECK_HEIGHT      100  // Default deck height
 #define DEFAULT_ENGINE_THROTTLE  20   // Default throttle position
 
-class Configuration {
+class Configuration : public DataFlash_APM2 {
 public:
   Configuration();
   
-  void init();                // Initialises configuration. Clears memory if none is found
+  // void init();                // Initialises configuration. Clears memory if none is found
   int readConfiguration();    // Reads all values from memory
   void writeConfiguration();  // Writes all values to memory
-  void reset();               // Resets configuration with set defaults
+  // void reset();               // Resets configuration with set defaults
   
   // Configurable variables
-  DataFlash_APM2 DataFlash;
-
-  byte defaultTrackPostiton;
+  // DataFlash_APM2 DataFlash;
+  
+  byte defaultTrackPosition;
   byte defaultDeckHeight;
   byte defaultEngineThrottle;
 };
