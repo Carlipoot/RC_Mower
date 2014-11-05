@@ -13,9 +13,9 @@
 // Define a byte
 #define byte uint8_t
 
-// To determine the start of configuration packet: 0xF00D
-#define HEAD_BYTE1  0xF0
-#define HEAD_BYTE2  0x0D
+// To determine the start of configuration packet
+#define HEAD_BYTE1  0xCA
+#define HEAD_BYTE2  0x41
 
 #define CONFIG_PAGE  1  // The page to start for configuration
 
@@ -28,14 +28,12 @@ class Configuration : public DataFlash_APM2 {
 public:
   Configuration();
   
-  // void init();                // Initialises configuration. Clears memory if none is found
   int readConfiguration();    // Reads all values from memory
   void writeConfiguration();  // Writes all values to memory
-  // void reset();               // Resets configuration with set defaults
+  void clearConfiguration();  // Clears all memory in configuration
+  void test();                // Testing the chip
   
   // Configurable variables
-  // DataFlash_APM2 DataFlash;
-  
   byte defaultTrackPosition;
   byte defaultDeckHeight;
   byte defaultEngineThrottle;

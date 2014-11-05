@@ -13,23 +13,6 @@ Configuration::Configuration() {
   defaultEngineThrottle = DEFAULT_ENGINE_THROTTLE;
 }
 
-/* void Configuration::init() {
-  // Initialise memory
-  DataFlash.Init();
-  
-  // See if configuration already exists. Clear and write defaults if none found
-  DataFlash.StartRead(CONFIG_PAGE);
-  byte head1 = DataFlash.ReadByte();
-  byte head2 = DataFlash.ReadByte();
-
-  if ( (head1 == HEAD_BYTE1) && (head2 == HEAD_BYTE2) ) {
-    readConfiguration();
-  } else {
-    // reset();
-    // writeConfiguration();
-  }
-} */
-
 int Configuration::readConfiguration() {
   // Read configuration
   StartRead(CONFIG_PAGE);
@@ -50,7 +33,7 @@ int Configuration::readConfiguration() {
 
 void Configuration::writeConfiguration() {
   // Begin writing configuration
-  StartWrite(1);
+  StartWrite(CONFIG_PAGE);
   
   WriteByte(HEAD_BYTE1);
   WriteByte(HEAD_BYTE2);
@@ -58,8 +41,27 @@ void Configuration::writeConfiguration() {
   WriteByte(defaultTrackPosition);
   WriteByte(defaultDeckHeight);
   WriteByte(defaultEngineThrottle);
+  
+  FinishWrite();
 }
 
-/* void Configuration::reset() {
-  DataFlash.EraseAll(&delay);
-} */
+void Configuration::clearConfiguration() {
+  PageErase(CONFIG_PAGE);
+}
+
+void Configuration::test() {
+  // Test config
+//  config.clearConfiguration();
+  delay(100);
+  writeConfiguration();
+  delay(20);
+  StartRead(1);
+  for (int i = 0; i < 20; i++ ){Serial.println(ReadByte());}
+  defaultTrackPosition = 50; 
+  Serial.println("+++++++++++++++++++++++++++++");
+  writeConfiguration();
+  delay(20);
+  StartRead(1);
+  for (int i = 0; i < 20; i++ ){Serial.println(ReadByte());}
+}
+

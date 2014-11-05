@@ -86,10 +86,8 @@ Joystick leftVertJS;
 Joystick rightHoriJS;
 Joystick rightVertJS;
 
-Configuration DataFlash;
+Configuration config;
 
-#define HEAD_BYTE1 0xA3
-#define HEAD_BYTE2 0x95
 
 
 /***************************************************************************************************
@@ -111,51 +109,8 @@ void setup() {
   rightHoriJS.setInput(I_RIGHT_JOYSTICK_HORIZONTAL);
   rightVertJS.setInput(I_RIGHT_JOYSTICK_VERTICAL);
   
-  
-  
-  
-  DataFlash.Init();  
-    delay(20);
-    DataFlash.ReadManufacturerID();
-    delay(10);
-    Serial.print("Manufacturer:");
-    Serial.print(int(DataFlash.df_manufacturer));
-    Serial.print(",");
-    Serial.print(DataFlash.df_device);
-    Serial.println();
-    
-  Serial.println("Testing configuration");
-  
-    // We start to write some info (sequentialy) starting from page 1
-    // This is similar to what we will do...
-//    DataFlash.EraseAll(&delay);
-    delay(10);
-    DataFlash.StartWrite(1);
-    Serial.println("After testing perform erase before using DataFlash for logging!");
-    Serial.println("");
-    Serial.println("Writing to flash... wait...");
-    for (int i = 0; i < 50; i++) {     // Write 1000 packets...
-        // We write packets of binary data... (without worry about nothing more)
-        DataFlash.WriteByte(HEAD_BYTE1);
-        DataFlash.WriteByte(HEAD_BYTE2);
-        DataFlash.WriteInt(4500 + i);
-        DataFlash.WriteByte(0xA2);               // 2 bytes of checksum (example)
-        DataFlash.WriteByte(0x4E);
-        delay(10);
-    }
-    DataFlash.FinishWrite();
-  delay(100);
-
-  DataFlash.StartRead(1);
-  for (int i = 0; i < 10000; i++) {
-  Serial.println(DataFlash.ReadInt());
-}
-  
-  
-
-  
-    
-    
+  config.Init();  
+//  config.EraseAll(&delay);
   // Set servos to their default position
   if ( DEBUG_MODE ) Serial.println("Defaulting servos");
   
@@ -197,38 +152,10 @@ void loop() {
   }
 
   // Read from other inputs when needed
-  
-  // Test for configuration
-
-  
-//  DataFlash.DataFlash.StartWrite(1);
-//  DataFlash.DataFlash.WriteByte(0xF0);
-//  DataFlash.DataFlash.WriteByte(0x0D);
-  delay(100);
-  // DataFlash.WriteByte(DataFlash.defaultTrackPosition);
-  // DataFlash.WriteByte(DataFlash.defaultDeckHeight);
-  // DataFlash.WriteByte(DataFlash.defaultEngineThrottle);
-  delay(1000);
-
-  // DataFlash.reset();
-  // Serial.printf("Base readings... track: %d, deck: %d, engine: %d\n", (int)DataFlash.defaultTrackPosition, (int)DataFlash.defaultDeckHeight, (int)DataFlash.defaultEngineThrottle);
-  // int success = DataFlash.readConfiguration();
-  // Serial.println("Reading");
-  // Serial.printf("Success: %d, track: %d, deck: %d, engine: %d\n", success, (int)DataFlash.defaultTrackPosition, (int)DataFlash.defaultDeckHeight, (int)DataFlash.defaultEngineThrottle);
-  // Serial.println("Writing track position to 50");
-  // DataFlash.defaultTrackPosition = 50;
-  // DataFlash.writeConfiguration();
-  // Serial.println("Reading again");
-  // success = DataFlash.readConfiguration();
-  // Serial.printf("Success: %d, track: %d, deck: %d, engine: %d\n", success, (int)DataFlash.defaultTrackPosition, (int)DataFlash.defaultDeckHeight, (int)DataFlash.defaultEngineThrottle);
-  // Serial.println("Reading again with setting track position to 100");
-  // DataFlash.defaultTrackPosition = 100;
-  // success = DataFlash.readConfiguration();
-  // Serial.printf("Success: %d, track: %d, deck: %d, engine: %d\n", success, (int)DataFlash.defaultTrackPosition, (int)DataFlash.defaultDeckHeight, (int)DataFlash.defaultEngineThrottle);
-  
-  
+ 
+//  config.test();
+for (int i = 0; i < 20 i++ ) {Serial.println(config.ReadByte());}
   while(1){};
-  
 }
 
 
