@@ -1,5 +1,5 @@
 /***************************************************************************************************
-** File:    Configuration.h
+** File:    Configuration.cpp
 ** Author:  Carl Hansen
 ** Version: 0.0.1
 ** Purpose: Used to set configurations of the robot.
